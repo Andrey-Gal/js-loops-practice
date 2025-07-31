@@ -20,31 +20,34 @@ document.getElementById('countTo100').addEventListener('click', () => {
   output.textContent = result;
 });
 
-// Игра: Угадай число
-document.getElementById('guessNumber').addEventListener('click', () => {
-  let secret = Math.floor(Math.random() * 10) + 1;
-  let guess;
-  let attempts = 0;
-  let number;
+// ==== Угадай число (через input) ====
+const userGuessInput = document.getElementById('userGuess');
+const checkGuessBtn = document.getElementById('checkGuess');
+const resultOutput = document.getElementById('gameResult');
 
-  do {
-    guess = prompt('Угадай число от 1 до 10');
+let secretNumber = Math.floor(Math.random() * 10) + 1;
+let tries = 0;
 
-    if (guess === null) break;
+checkGuessBtn.addEventListener('click', () => {
+  const userGuess = parseInt(userGuessInput.value);
 
-    number = parseInt(guess);
-
-    if (isNaN(number)) {
-      alert('Пожалуйста, введи число!');
-      continue;
-    }
-
-    attempts++;
-  } while (number !== secret);
-
-  if (guess === null) {
-    output.textContent = 'Вы отменили игру.';
-  } else {
-    output.textContent = `🎉 Угадал! Это было ${secret}. Попыток: ${attempts}`;
+  if (isNaN(userGuess) || userGuess < 1 || userGuess > 10) {
+    resultOutput.textContent = 'Введите число от 1 до 10!';
+    return;
   }
+
+  tries++;
+
+  if (userGuess === secretNumber) {
+    resultOutput.textContent = `🎉 Угадал! Это было ${secretNumber}. Попыток: ${tries}`;
+    secretNumber = Math.floor(Math.random() * 10) + 1;
+    tries = 0;
+  } else if (userGuess < secretNumber) {
+    resultOutput.textContent = 'Слишком маленькое!';
+  } else {
+    resultOutput.textContent = 'Слишком большое!';
+  }
+
+  userGuessInput.value = '';
+  userGuessInput.focus();
 });
