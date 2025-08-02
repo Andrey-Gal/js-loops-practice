@@ -1,28 +1,51 @@
-// === Угадай число ===
 const userGuessInput = document.getElementById('userGuess');
 const checkGuessBtn = document.getElementById('checkGuess');
 const resultOutput = document.getElementById('gameResult');
+const guessTitle = document.querySelector('h3');
 
-let secretNumber = Math.floor(Math.random() * 10) + 1;
-console.log(`Загадано число: ${secretNumber}`); // Для отладки
+const show1to10Btn = document.getElementById('show1to10');
+const countTo100Btn = document.getElementById('countTo100');
+const output = document.getElementById('output');
+
+let min = 1;
+let max = 10;
+let secretNumber = 0;
 let tries = 0;
 
-checkGuessBtn.addEventListener('click', () => {
-  const userGuess = parseInt(userGuessInput.value, 10);
+// Генерация числа
+function generateNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-  if (isNaN(userGuess) || userGuess < 1 || userGuess > 10) {
-    resultOutput.textContent = 'Введите число от 1 до 10!';
+// Сброс игры и установка нового числа
+function resetGame(newMin, newMax, titleText) {
+  min = newMin;
+  max = newMax;
+  secretNumber = generateNumber(min, max);
+  tries = 0;
+  guessTitle.textContent = titleText;
+  resultOutput.textContent = '';
+  userGuessInput.value = '';
+  console.log(`🎯 Загадано число: ${secretNumber}`);
+}
+
+// Проверка угадайки
+checkGuessBtn.addEventListener('click', () => {
+  const guess = parseInt(userGuessInput.value, 10);
+
+  if (isNaN(guess) || guess < min || guess > max) {
+    resultOutput.textContent = `Введите число от ${min} до ${max}!`;
     return;
   }
 
   tries++;
 
-  if (userGuess === secretNumber) {
-    resultOutput.textContent = `🎉 Угадал! Это было ${secretNumber}. Попыток: ${tries}`;
-    secretNumber = Math.floor(Math.random() * 10) + 1;
-    console.log(`Новое число: ${secretNumber}`);
+  if (guess === secretNumber) {
+    resultOutput.textContent = `🎉 Верно! Это было ${secretNumber}. Попыток: ${tries}`;
+    secretNumber = generateNumber(min, max); // Новое число для следующей игры
+    console.log(`🎯 Новое число: ${secretNumber}`);
     tries = 0;
-  } else if (userGuess < secretNumber) {
+  } else if (guess < secretNumber) {
     resultOutput.textContent = 'Слишком маленькое!';
   } else {
     resultOutput.textContent = 'Слишком большое!';
@@ -31,26 +54,27 @@ checkGuessBtn.addEventListener('click', () => {
   userGuessInput.value = '';
 });
 
-
-// === Показываем числа от 1 до 10 (for) ===
-document.getElementById('show1to10').addEventListener('click', () => {
+// Цикл for от 1 до 10
+show1to10Btn.addEventListener('click', () => {
   let result = '';
   for (let i = 1; i <= 10; i++) {
     result += i + '\n';
   }
-  document.getElementById('output').textContent = result;
+  output.textContent = result;
+  resetGame(1, 10, 'Угадай число от 1 до 10');
 });
 
-
-// === Счёт до 100 по 10 (while) ===
-document.getElementById('countTo100').addEventListener('click', () => {
+// Цикл while от 10 до 100 по 10
+countTo100Btn.addEventListener('click', () => {
   let result = '';
-  let i = 0;
+  let i = 10;
   while (i <= 100) {
     result += i + '\n';
     i += 10;
   }
-  document.getElementById('output').textContent = result;
-
-  // НЕ сбрасываем угадайку
+  output.textContent = result;
+  resetGame(10, 100, 'Угадай число от 10 до 100');
 });
+
+// Первый запуск
+resetGame(1, 10, 'Угадай число от 1 до 10');
