@@ -1,80 +1,49 @@
+// === Получаем элементы ===
 const userGuessInput = document.getElementById('userGuess');
 const checkGuessBtn = document.getElementById('checkGuess');
 const resultOutput = document.getElementById('gameResult');
-const guessTitle = document.querySelector('h3');
 
 const show1to10Btn = document.getElementById('show1to10');
-const countTo100Btn = document.getElementById('countTo100');
 const output = document.getElementById('output');
 
+// === Угадайка от 1 до 10 ===
 let min = 1;
 let max = 10;
-let secretNumber = 0;
+let secretNumber = getRandomNumber(min, max);
 let tries = 0;
 
-// Генерация числа
-function generateNumber(min, max) {
+function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Сброс игры и установка нового числа
-function resetGame(newMin, newMax, titleText) {
-  min = newMin;
-  max = newMax;
-  secretNumber = generateNumber(min, max);
-  tries = 0;
-  guessTitle.textContent = titleText;
-  resultOutput.textContent = '';
-  userGuessInput.value = '';
-  console.log(`🎯 Загадано число: ${secretNumber}`);
-}
-
-// Проверка угадайки
 checkGuessBtn.addEventListener('click', () => {
-  const guess = parseInt(userGuessInput.value, 10);
+  const guess = parseInt(userGuessInput.value);
 
-  if (isNaN(guess) || guess < min || guess > max) {
-    resultOutput.textContent = `Введите число от ${min} до ${max}!`;
+  if (isNaN(guess)) {
+    resultOutput.textContent = 'Введите число!';
     return;
   }
 
   tries++;
 
-  if (guess === secretNumber) {
-    resultOutput.textContent = `🎉 Верно! Это было ${secretNumber}. Попыток: ${tries}`;
-    secretNumber = generateNumber(min, max); // Новое число для следующей игры
-    console.log(`🎯 Новое число: ${secretNumber}`);
-    tries = 0;
-  } else if (guess < secretNumber) {
+  if (guess < secretNumber) {
     resultOutput.textContent = 'Слишком маленькое!';
-  } else {
+  } else if (guess > secretNumber) {
     resultOutput.textContent = 'Слишком большое!';
-  }
+  } else {
+    resultOutput.textContent = `Угадал! Это было ${secretNumber}. Попыток: ${tries}`;
 
-  userGuessInput.value = '';
+    // Перезапуск игры только ПОСЛЕ УГАДЫВАНИЯ
+    secretNumber = getRandomNumber(min, max);
+    tries = 0;
+  }
 });
 
-// Цикл for от 1 до 10
+// === Кнопка 1 до 10 (for) ===
 show1to10Btn.addEventListener('click', () => {
   let result = '';
   for (let i = 1; i <= 10; i++) {
     result += i + '\n';
   }
   output.textContent = result;
-  resetGame(1, 10, 'Угадай число от 1 до 10');
 });
-
-// Цикл while от 10 до 100 по 10
-countTo100Btn.addEventListener('click', () => {
-  let result = '';
-  let i = 10;
-  while (i <= 100) {
-    result += i + '\n';
-    i += 10;
-  }
-  output.textContent = result;
-  resetGame(10, 100, 'Угадай число от 10 до 100');
-});
-
-// Первый запуск
-resetGame(1, 10, 'Угадай число от 1 до 10');
