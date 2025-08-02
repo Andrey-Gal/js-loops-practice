@@ -32,7 +32,7 @@ checkGuessBtn.addEventListener('click', () => {
 });
 
 
-// === Показываем числа от 1 до 10 ===
+// === Показываем числа от 1 до 10 (for) ===
 document.getElementById('show1to10').addEventListener('click', () => {
   let result = '';
   for (let i = 1; i <= 10; i++) {
@@ -42,7 +42,7 @@ document.getElementById('show1to10').addEventListener('click', () => {
 });
 
 
-// === Счёт до 100 по 10 ===
+// === Счёт до 100 по 10 (while) ===
 document.getElementById('countTo100').addEventListener('click', () => {
   let result = '';
   let i = 0;
@@ -52,7 +52,5 @@ document.getElementById('countTo100').addEventListener('click', () => {
   }
   document.getElementById('output').textContent = result;
 
-  // Очищаем поле ввода и результат угадайки
-  userGuessInput.value = '';
-  resultOutput.textContent = '';
+  // НЕ сбрасываем угадайку
 });
