@@ -3,11 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JS Loops Practice</title>
+  <title>Тренажёр умножения</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Привет, Андрей! 👋</h1>
-  <p>Здесь появится твоя игра с циклами!</p>
+  <h1>Привет, тренажёр здесь 🧠</h1>
+
+  <div id="difficulty">
+    <label>Сложность:
+      <select id="level">
+        <option value="5">Лёгкий</option>
+        <option value="10" selected>Средний</option>
+        <option value="20">Сложный</option>
+      </select>
+    </label>
+  </div>
+
+  <button onclick="generateTask()">Новый пример</button>
+  <div id="scoreContainer">
+    Очки: <span id="score">0</span>
+  </div>
+
+  <div id="timer">⏳ 30 сек</div>
+
+  <p id="task">Сколько будет ...?</p>
+  <input type="number" id="answer" />
+  <button onclick="checkAnswer()">Проверить</button>
+  <button onclick="resetGame()">🔄 Начать заново</button>
+
+  <p id="result"></p>
+
   <script src="script.js"></script>
 </body>
 </html>
